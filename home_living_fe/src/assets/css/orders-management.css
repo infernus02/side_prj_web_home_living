@@ -1,0 +1,24 @@
+/* ============================================
+   ORDERS MANAGEMENT STYLES
+   ============================================ */
+
+@import './products-management.css';
+
+/* Custom styles for orders */
+.orders-status-select {
+  width: 100%;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.orders-status-select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 107, 91, 0.1);
+}

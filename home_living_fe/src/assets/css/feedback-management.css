@@ -1,0 +1,44 @@
+/* ============================================
+   FEEDBACK MANAGEMENT STYLES
+   ============================================ */
+
+@import './products-management.css';
+
+/* Custom styles for feedback */
+.feedback-rating {
+  font-size: 14px;
+  color: #ffc107;
+}
+
+.feedback-status-select {
+  width: 100%;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.feedback-status-select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 107, 91, 0.1);
+}
+
+.feedback-status-new {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.feedback-status-read {
+  background: #e2e3e5;
+  color: #383d41;
+}
+
+.feedback-status-replied {
+  background: #d4edda;
+  color: #155724;
+}

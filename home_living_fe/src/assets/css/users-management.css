@@ -1,0 +1,25 @@
+/* ============================================
+   USERS MANAGEMENT STYLES
+   ============================================ */
+
+@import './products-management.css';
+
+/* Custom styles for users */
+.user-role-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.user-role-badge.admin {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.user-role-badge.user {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}

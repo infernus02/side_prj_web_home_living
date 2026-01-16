@@ -1,0 +1,38 @@
+/* ============================================
+   ADMIN FOOTER STYLES
+   ============================================ */
+
+.admin-footer {
+  background: #2c3e50;
+  border-top: 1px solid rgba(255, 107, 91, 0.2);
+  padding: 20px 30px;
+  text-align: center;
+  margin-top: auto;
+}
+
+[data-theme="dark"] .admin-footer {
+  background: #1a1a1a;
+  border-top-color: rgba(255, 107, 91, 0.3);
+}
+
+.admin-footer p {
+  margin: 0;
+  font-size: 13px;
+  color: #bdc3c7;
+  font-weight: 500;
+}
+
+[data-theme="dark"] .admin-footer p {
+  color: #95a5a6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-footer {
+    padding: 15px 20px;
+  }
+
+  .admin-footer p {
+    font-size: 12px;
+  }
+}

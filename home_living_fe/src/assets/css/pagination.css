@@ -1,0 +1,133 @@
+/* ============================================
+   PAGINATION STYLES
+   ============================================ */
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 20px;
+  background: #f5f5f5;
+  border-top: 1px solid #e9ecef;
+}
+
+[data-theme="dark"] .pagination-container {
+  background: #3d3d3d;
+  border-top-color: #555;
+}
+
+.pagination-arrow {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fff;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+[data-theme="dark"] .pagination-arrow {
+  background: #2c2c2c;
+  border-color: #555;
+  color: #fff;
+}
+
+.pagination-arrow:hover:not(:disabled) {
+  background: #ff6b5b;
+  color: #fff;
+  border-color: #ff6b5b;
+}
+
+.pagination-arrow:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination-numbers {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.pagination-number {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fff;
+  color: #333;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+[data-theme="dark"] .pagination-number {
+  background: #2c2c2c;
+  border-color: #555;
+  color: #fff;
+}
+
+.pagination-number:hover {
+  border-color: #ff6b5b;
+  color: #ff6b5b;
+}
+
+.pagination-number.active {
+  background: #ff6b5b;
+  color: #fff;
+  border-color: #ff6b5b;
+}
+
+.pagination-dots {
+  color: #999;
+  font-weight: 600;
+  padding: 0 4px;
+}
+
+[data-theme="dark"] .pagination-dots {
+  color: #aaa;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .pagination-container {
+    gap: 4px;
+    padding: 15px;
+  }
+
+  .pagination-arrow,
+  .pagination-number {
+    width: 36px;
+    height: 36px;
+    font-size: 12px;
+  }
+
+  .pagination-numbers {
+    gap: 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagination-container {
+    gap: 2px;
+    padding: 12px;
+  }
+
+  .pagination-arrow,
+  .pagination-number {
+    width: 32px;
+    height: 32px;
+    font-size: 11px;
+  }
+
+  .pagination-numbers {
+    gap: 2px;
+  }
+}
