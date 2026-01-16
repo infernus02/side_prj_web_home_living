@@ -16,7 +16,6 @@ public class TodayScheduleResponse {
     private String timeLabel; // "09:00", "10:30", etc.
     private String customerName;
     private String treatmentName;
-    private String staffName;
     private String status; // "Đã hoàn thành", "Đang thực hiện", "Đã đặt"
     private String statusColor; // "green", "yellow", "blue"
 }

@@ -4,12 +4,10 @@ import com.project.homeliving.dto.feedback.FeedbackReplyRequest;
 import com.project.homeliving.dto.feedback.FeedbackRequest;
 import com.project.homeliving.dto.feedback.FeedbackResponse;
 import com.project.homeliving.dto.feedback.FeedbackSearch;
-import com.project.homeliving.dto.user.response.CustomerResponse;
-import com.project.homeliving.dto.user.response.StaffResponse;
+import com.project.homeliving.dto.user.response.UserResponse;
 import com.project.homeliving.entity.feedback.Feedback;
 import com.project.homeliving.entity.product.Product;
-import com.project.homeliving.entity.user.Customer;
-import com.project.homeliving.entity.user.Staff;
+import com.project.homeliving.entity.user.User;
 import com.project.homeliving.exception.AppException;
 import com.project.homeliving.exception.ErrorCode;
 import com.project.homeliving.mapper.FeedbackMapper;
@@ -68,21 +66,21 @@ public class FeedbackService implements IFeedbackService {
             List<Feedback> existingFeedback = feedbackRepository.findCustomerFeedbackForProduct(
                     request.getCustomerId(), request.getProductId());
             if (existingFeedback.size() != 0) {
-                log.error(">>>feed back đã tồn tại với customer {} và product {}", request.getCustomerId(), request.getProductId());
+                log.error(">>>feed back đã tồn tại với user {} và product {}", request.getCustomerId(), request.getProductId());
                 throw new AppException(ErrorCode.FEEDBACK_ALREADY_EXISTS);
             }
         }
 
 
 
-        CustomerResponse customerResponse = authenService.getCustomerInContext();
-        log.info(">>>> customer info = {}", customerResponse);
+        UserResponse userResponse = null;
+        log.info(">>>> user info = {}", userResponse);
 
         Feedback feedback = Feedback.builder()
                 .rating(request.getRating())
                 .comment(request.getComment())
                 .feedbackType("CUSTOMER")
-                .customer( new Customer(customerResponse.getId())  )
+                .user( new User(userResponse.getId())  )
                 .product(request.getProductId() != null ? new Product(request.getProductId()) : null)
                 .build();
 
@@ -106,38 +104,26 @@ public class FeedbackService implements IFeedbackService {
         // Validate parent feedback exists
         Feedback parentFeedback = this.findById(request.getParentFeedbackId());
 
-        // Validate: Chỉ có thể reply feedback gốc của Customer (không reply reply)
+        // Validate: Chỉ có thể reply feedback gốc của User (không reply reply)
         if (parentFeedback.getParentFeedback() != null) {
             throw new AppException(ErrorCode.INVALID_REQUEST);
         }
 
-        // Validate: Parent feedback phải là của Customer
+        // Validate: Parent feedback phải là của User
         if (!"CUSTOMER".equals(parentFeedback.getFeedbackType())) {
             throw new AppException(ErrorCode.INVALID_REQUEST);
         }
 
-        StaffResponse staffResponse = authenService.getStafInContext();
-
-        Feedback replyFeedback = Feedback.builder()
-                .comment(request.getComment())
-                .feedbackType("STAFF_REPLY")
-                .staff(new Staff(staffResponse.getId()))
-                .parentFeedback(parentFeedback)
-                .product(parentFeedback.getProduct())     // Inherit từ parent
-                .build();
-
-        feedbackRepository.save(replyFeedback);
-
-        return feedbackMapper.toResponse(replyFeedback);
+        return null;
     }
 
     @Override
     public Boolean checkFeedback(Long treatmentId, Long productId) {
-        CustomerResponse customerResponse = authenService.getCustomerInContext();
+        UserResponse userResponse = null;
 
         if(treatmentId != null) {
             List<Feedback> feedbacks = feedbackRepository.findCustomerFeedbackForProduct
-                    (customerResponse.getId(), productId);
+                    (userResponse.getId(), productId);
             if(feedbacks.size() != 0)
                 return true;
         }
@@ -147,12 +133,6 @@ public class FeedbackService implements IFeedbackService {
     @Override
     public void delete(Long id) {
         Feedback feedback = this.findById(id);
-
-        // Validate: Không thể xóa feedback nếu còn có replies từ staff
-//        if (feedbackRepository.hasActiveReplies(id)) {
-//            throw new AppException(ErrorCode.CANNOT_DELETE_FEEDBACK_HAS_REPLIES);
-//        }
-
         feedback.setIsDelete(true);
         feedbackRepository.save(feedback);
     }

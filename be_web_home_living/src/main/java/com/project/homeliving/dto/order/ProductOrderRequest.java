@@ -19,6 +19,5 @@ public class ProductOrderRequest {
     LocalDateTime orderTime;
 
     Long customerId;
-    Long staffId;
     List<OrderDetailRequest> orderDetails;  // Danh sách sản phẩm (bắt buộc)
 }

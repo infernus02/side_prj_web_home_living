@@ -9,7 +9,6 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CountResponse {
-    Long countStaff;
     Long countCustomer;
     Double renuveMonth;
 }

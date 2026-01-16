@@ -1,8 +1,7 @@
 package com.project.homeliving.entity.order;
 
 import com.project.homeliving.entity.BaseEntity;
-import com.project.homeliving.entity.user.Customer;
-import com.project.homeliving.entity.user.Staff;
+import com.project.homeliving.entity.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,11 +31,7 @@ public class Order extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
-    Customer customer;
-
-    @ManyToOne
-    @JoinColumn(name = "staff_id")
-    Staff staff;
+    User user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<OrderDetail> orderDetails;

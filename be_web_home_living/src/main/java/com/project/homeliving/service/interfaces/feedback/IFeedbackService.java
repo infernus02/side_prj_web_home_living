@@ -12,11 +12,11 @@ public interface IFeedbackService {
     FeedbackResponse detail(Long id);
     Page<FeedbackResponse> search(FeedbackSearch search);
 
-    // Customer feedback (chỉ 1 lần)
+    // User feedback (chỉ 1 lần)
     FeedbackResponse create(FeedbackRequest request);
     FeedbackResponse update(Long id, FeedbackRequest request);
 
-    // Staff reply (nhiều lần)
+    //  reply (nhiều lần)
     FeedbackResponse replyFeedback(FeedbackReplyRequest request);
 
     Boolean checkFeedback(Long treatmentId, Long productId);

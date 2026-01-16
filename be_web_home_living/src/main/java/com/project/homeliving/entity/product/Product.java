@@ -35,7 +35,7 @@ public class Product extends BaseEntity {
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     List<Feedback> feedbacks;
 
-    // Tính rating trung bình từ feedback của Customer (không tính Staff reply)
+    // Tính rating trung bình từ feedback của User (không tính  reply)
     @Formula("""
         (SELECT COALESCE(AVG(f.rating), 0.0)
          FROM tbl_feedback f

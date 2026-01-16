@@ -17,5 +17,5 @@ public class RevenueReportResponse {
     Double revenue; // Doanh thu
     Double commission; // Hoa hồng (nếu có)
     Double profit; // Lợi nhuận (revenue - commission)
-    String type; // "daily", "staff", "service"
+    String type; // "daily", "", "service"
 }

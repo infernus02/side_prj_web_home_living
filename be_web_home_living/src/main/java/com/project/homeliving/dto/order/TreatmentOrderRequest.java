@@ -18,6 +18,5 @@ public class TreatmentOrderRequest {
     LocalDateTime orderTime;
 
     Long customerId;
-    Long staffId;
     Long treatmentId;  // Bắt buộc cho Treatment Order
 }

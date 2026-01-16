@@ -16,7 +16,7 @@ public interface IFeedbackRepository extends JpaRepository<Feedback, Long> {
 
     @Query("""
     select f from Feedback f
-    where f.customer.id = :customerId
+    where f.user.id = :customerId
         and f.product.id = :productId
         and f.feedbackType = 'CUSTOMER'
         and f.parentFeedback is null 

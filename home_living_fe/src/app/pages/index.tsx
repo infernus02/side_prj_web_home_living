@@ -1,6 +1,42 @@
 import React from 'react';
 
 const HomePage: React.FC = () => {
+  const [currentSlide, setCurrentSlide] = React.useState(0);
+
+  const banners = [
+    {
+      image: require('../../assets/images/banner/banner1.jpg'),
+      title: 'Bộ sưu tập mùa xuân 2026',
+      desc: 'Làm mới không gian sống của bạn',
+    },
+    {
+      image: require('../../assets/images/banner/banner2.jpg'),
+      title: 'Khuyến mãi đặc biệt',
+      desc: 'Giảm giá lên đến 50%',
+    },
+    {
+      image: require('../../assets/images/banner/banner3.jpg'),
+      title: 'Sản phẩm mới',
+      desc: 'Cập nhật hàng tuần',
+    },
+    {
+      image: require('../../assets/images/banner/banner4.jpg'),
+      title: 'Chất lượng cao cấp',
+      desc: 'Sản phẩm chính hãng 100%',
+    },
+    {
+      image: require('../../assets/images/banner/banner5.jpg'),
+      title: 'Giao hàng nhanh',
+      desc: 'Miễn phí vận chuyển từ 500k',
+    },
+  ];
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % banners.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
   const products = [
     {
       id: 1,
@@ -140,12 +176,24 @@ const HomePage: React.FC = () => {
     <main>
       <section className="hero-slider">
         <div className="slider-container">
-          <div className="slide active">
-            <div className="slide-content">
-              <h1>Bộ sưu tập mùa xuân 2026</h1>
-              <p>Làm mới không gian sống của bạn</p>
-              <a href="/products" className="btn btn-primary">Khám phá ngay</a>
-            </div>
+          {banners.map((banner, idx) => (
+            <div key={idx} className={`slide ${idx === currentSlide ? 'active' : ''}`} style={{ backgroundImage: `url(${banner.image})` }}></div>
+          ))}
+          <div className="slide-content">
+            <h1>Bộ sưu tập mùa xuân 2026</h1>
+            <p>Làm mới không gian sống của bạn</p>
+            <a href="/products" className="btn btn-primary">Khám phá ngay</a>
+          </div>
+          <button className="slider-btn prev" onClick={() => setCurrentSlide((prev) => (prev - 1 + banners.length) % banners.length)}>
+            <i className="fa-solid fa-chevron-left"></i>
+          </button>
+          <button className="slider-btn next" onClick={() => setCurrentSlide((prev) => (prev + 1) % banners.length)}>
+            <i className="fa-solid fa-chevron-right"></i>
+          </button>
+          <div className="slider-dots">
+            {banners.map((_, idx) => (
+              <button key={idx} className={`dot ${idx === currentSlide ? 'active' : ''}`} onClick={() => setCurrentSlide(idx)}></button>
+            ))}
           </div>
         </div>
       </section>

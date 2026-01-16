@@ -1,6 +1,8 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import Swal from 'sweetalert2';
+import { toast } from 'react-toastify';
+import loginImage from '../../../assets/images/login.jpg';
+import { authService } from '../../services/authService';
 import '../../../assets/css/auth.css';
 
 const LoginPage: React.FC = () => {
@@ -14,60 +16,33 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
     setLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      const adminEmail = 'admin@gmail.com';
-      const adminPassword = '1234';
+    try {
+      const response = await authService.login({
+        username: email,
+        password: password
+      });
 
-      if (email === adminEmail && password === adminPassword) {
-        const userData = {
-          id: 1,
-          name: 'Admin',
-          email: email,
-          avatar: 'https://via.placeholder.com/150',
-          role: 'admin'
-        };
+      if (response.code === 200 && response.data) {
+        const role = response.data.role;
+        // Wait for fetchUserInfo to complete before navigating
+        const userInfoSuccess = await authService.fetchUserInfo(response.data.token, response.data.role);
 
-        localStorage.setItem('currentUser', JSON.stringify(userData));
-
-        Swal.fire({
-          icon: 'success',
-          title: 'Đăng nhập thành công!',
-          text: `Xin chào Admin`,
-          timer: 1500,
-          showConfirmButton: false
-        }).then(() => {
-          navigate('/admin/dashboard');
-        });
-      } else if (email && password) {
-        const userData = {
-          id: Math.random(),
-          name: email.split('@')[0],
-          email: email,
-          avatar: 'https://via.placeholder.com/150',
-          role: 'user'
-        };
-
-        localStorage.setItem('currentUser', JSON.stringify(userData));
-
-        Swal.fire({
-          icon: 'success',
-          title: 'Đăng nhập thành công!',
-          text: `Xin chào ${userData.name}`,
-          timer: 1500,
-          showConfirmButton: false
-        }).then(() => {
-          navigate('/');
-        });
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Lỗi',
-          text: 'Vui lòng nhập email và mật khẩu'
-        });
+        if (userInfoSuccess) {
+          if (role === 'ADMIN' || role === 'STAFF') {
+            navigate('/admin/dashboard');
+          } else {
+            navigate('/');
+          }
+        } else {
+          toast.error('Không thể tải thông tin người dùng');
+        }
       }
+    } catch (error) {
+      console.error('Login error:', error);
+      toast.error('Đăng nhập thất bại');
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -168,7 +143,7 @@ const LoginPage: React.FC = () => {
           <div className="auth-image-side">
             <div className="auth-image-content">
               <img
-                src="https://via.placeholder.com/500x600?text=Home+Living"
+                src={loginImage}
                 alt="Home Living"
               />
               <div className="auth-image-overlay">

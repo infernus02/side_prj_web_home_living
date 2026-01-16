@@ -3,9 +3,8 @@ package com.project.homeliving.configuration.init;
 import com.project.homeliving.entity.product.Category;
 import com.project.homeliving.entity.product.Product;
 import com.project.homeliving.entity.user.Account;
-import com.project.homeliving.entity.user.Customer;
+import com.project.homeliving.entity.user.User;
 import com.project.homeliving.entity.user.Role;
-import com.project.homeliving.entity.user.Staff;
 import com.project.homeliving.enums.CategoryTypeEnum;
 import com.project.homeliving.enums.RoleEnum;
 import com.project.homeliving.repository.feedback.IFeedbackRepository;
@@ -14,8 +13,7 @@ import com.project.homeliving.repository.order.IOrderRepository;
 import com.project.homeliving.repository.product.ICategoryRepository;
 import com.project.homeliving.repository.product.IProductRepository;
 import com.project.homeliving.repository.user.IAccountRepository;
-import com.project.homeliving.repository.user.ICustomerRepository;
-import com.project.homeliving.repository.user.IStaffRepository;
+import com.project.homeliving.repository.user.IUserRepository;
 import com.project.homeliving.service.interfaces.user.IRoleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,12 +30,11 @@ import java.util.List;
 public class ApplicationInitConfig {
 
     private final IRoleService roleService;
-    private final IAccountRepository userRepository;
+    private final IAccountRepository accountRepository;
+    private final IUserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ICategoryRepository categoryRepository;
     private final IProductRepository productRepository;
-    private final IStaffRepository staffRepository;
-    private final ICustomerRepository customerRepository;
     private final IOrderRepository orderRepository;
     private final IOrderDetailRepository orderDetailRepository;
     private final IFeedbackRepository feedbackRepository;
@@ -47,10 +44,9 @@ public class ApplicationInitConfig {
     ApplicationRunner applicationRunner(){
         return args ->{
             this.createRoles();
-            this.createAccountAdmin();
+            this.createUser();
             this.createCategories();
             this.createProducts();
-            this.createStaffs();
             this.createCustomers();
         };
     }
@@ -64,23 +60,33 @@ public class ApplicationInitConfig {
         }
     }
 
-    void createAccountAdmin(){
-        if (userRepository.count() == 0){
-            Role roleAdmin = new Role(RoleEnum.ADMIN.name());
+    void createUser(){
+        if (userRepository.count() != 0)
+            return;
 
-            Account account = Account.builder()
-                    .username("admin")
-                    .password(passwordEncoder.encode("1234"))
-                    .role(roleAdmin)
-                    .build();
+        User userAdmin = new User();
+        User userCustomer = new User();
 
-            userRepository.save(account);
+        Account accountAdmin = Account.builder()
+                .username("admin@gmail.com")
+                .password(passwordEncoder.encode("1234"))
+                .role(new Role(RoleEnum.ADMIN.name()))
+                .build();
 
-            Staff staff = new Staff();
-            staff.setFullName("Quản trị viên");
-            staff.setAccount(account);
-            staffRepository.save(staff);
-        }
+        Account accountCustomer = Account.builder()
+                .username("user@gmail.com")
+                .password(passwordEncoder.encode("1234"))
+                .role(new Role(RoleEnum.CUSTOMER.name()))
+                .build();
+
+        userAdmin.setAccount(accountAdmin);
+        userCustomer.setAccount(accountCustomer);
+
+        accountRepository.save(accountAdmin);
+        accountRepository.save(accountCustomer);
+
+        userRepository.save(userAdmin);
+        userRepository.save(userCustomer);
     }
 
     void createCategories(){
@@ -212,103 +218,15 @@ public class ApplicationInitConfig {
         log.info("Đã tạo {} products mẫu", products.size());
     }
 
-    void createStaffs(){
-        if(staffRepository.count() > 0) {
-            return;
-        }
-
-        Role staffRole = new Role(RoleEnum.STAFF.name());
-
-        List<Staff> staffs = List.of(
-                Staff.builder()
-                        .fullName("Nguyễn Thị Hoa")
-                        .phoneNumber("0901234567")
-                        .email("hoa.nguyen@salon.com")
-                        .major("Cắt tóc nam")
-                        .avatar("https://images.unsplash.com/photo-1494790108755-2616b612b786?w=500")
-                        .status(true)
-                        .account(Account.builder()
-                                .username("staff_hoa")
-                                .password(passwordEncoder.encode("123456"))
-                                .role(staffRole)
-                                .build())
-                        .build(),
-
-                Staff.builder()
-                        .fullName("Trần Văn Minh")
-                        .phoneNumber("0901234568")
-                        .email("minh.tran@salon.com")
-                        .major("Uốn tóc nữ")
-                        .avatar("https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=500")
-                        .status(true)
-                        .account(Account.builder()
-                                .username("staff_minh")
-                                .password(passwordEncoder.encode("123456"))
-                                .role(staffRole)
-                                .build())
-                        .build(),
-
-                Staff.builder()
-                        .fullName("Lê Thị Mai")
-                        .phoneNumber("0901234569")
-                        .email("mai.le@salon.com")
-                        .major("Nhuộm tóc")
-                        .avatar("https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=500")
-                        .status(true)
-                        .account(Account.builder()
-                                .username("staff_mai")
-                                .password(passwordEncoder.encode("123456"))
-                                .role(staffRole)
-                                .build())
-                        .build(),
-
-                Staff.builder()
-                        .fullName("Phạm Văn Đức")
-                        .phoneNumber("0901234570")
-                        .email("duc.pham@salon.com")
-                        .major("Chăm sóc da")
-                        .avatar("https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500")
-                        .status(true)
-                        .account(Account.builder()
-                                .username("staff_duc")
-                                .password(passwordEncoder.encode("123456"))
-                                .role(staffRole)
-                                .build())
-                        .build(),
-
-                Staff.builder()
-                        .fullName("Hoàng Thị Lan")
-                        .phoneNumber("0901234571")
-                        .email("lan.hoang@salon.com")
-                        .major("Nail art")
-                        .avatar("https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=500")
-                        .status(true)
-                        .account(Account.builder()
-                                .username("staff_lan")
-                                .password(passwordEncoder.encode("123456"))
-                                .role(staffRole)
-                                .build())
-                        .build()
-        );
-
-        // Lưu account trước, sau đó lưu staff
-        for(Staff staff : staffs) {
-            userRepository.save(staff.getAccount());
-            staffRepository.save(staff);
-        }
-
-        log.info("Đã tạo {} staffs mẫu", staffs.size());
-    }
-
     void createCustomers(){
-        if(customerRepository.count() > 0) {
+        if(userRepository.count() > 0) {
             return;
         }
 
         Role customerRole = new Role(RoleEnum.CUSTOMER.name());
 
-        List<Customer> customers = List.of(
-                Customer.builder()
+        List<User> users = List.of(
+                User.builder()
                         .fullName("Nguyễn Văn An")
                         .phoneNumber("0987654321")
                         .email("an.nguyen@gmail.com")
@@ -321,7 +239,7 @@ public class ApplicationInitConfig {
                                 .build())
                         .build(),
 
-                Customer.builder()
+                User.builder()
                         .fullName("Trần Thị Bình")
                         .phoneNumber("0987654322")
                         .email("binh.tran@gmail.com")
@@ -334,7 +252,7 @@ public class ApplicationInitConfig {
                                 .build())
                         .build(),
 
-                Customer.builder()
+                User.builder()
                         .fullName("Lê Văn Cường")
                         .phoneNumber("0987654323")
                         .email("cuong.le@gmail.com")
@@ -347,7 +265,7 @@ public class ApplicationInitConfig {
                                 .build())
                         .build(),
 
-                Customer.builder()
+                User.builder()
                         .fullName("Phạm Thị Dung")
                         .phoneNumber("0987654324")
                         .email("dung.pham@gmail.com")
@@ -360,7 +278,7 @@ public class ApplicationInitConfig {
                                 .build())
                         .build(),
 
-                Customer.builder()
+                User.builder()
                         .fullName("Hoàng Văn Em")
                         .phoneNumber("0987654325")
                         .email("em.hoang@gmail.com")
@@ -374,13 +292,13 @@ public class ApplicationInitConfig {
                         .build()
         );
 
-        // Lưu account trước, sau đó lưu customer
-        for(Customer customer : customers) {
-            userRepository.save(customer.getAccount());
-            customerRepository.save(customer);
+        // Lưu account trước, sau đó lưu user
+        for(User user : users) {
+            accountRepository.save(user.getAccount());
+            userRepository.save(user);
         }
 
-        log.info("Đã tạo {} customers mẫu", customers.size());
+        log.info("Đã tạo {} users mẫu", users.size());
     }
 
 }

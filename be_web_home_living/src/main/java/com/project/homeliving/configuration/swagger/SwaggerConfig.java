@@ -19,7 +19,7 @@ public class SwaggerConfig {
     public OpenAPI apiInfo() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Lab1 API")
+                        .title("Be web")
                         .description("Demo Spring Boot REST API dùng Swagger UI")
                         .version("v1.0.0")
                         .contact(new Contact()
@@ -44,23 +44,31 @@ public class SwaggerConfig {
     @Bean
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()
-                .group("public-api")
+                .group("0.public-api")
                 .pathsToMatch("/**") // match tất cả endpoint
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi authApi() {
+        return GroupedOpenApi.builder()
+                .group("1.auth-api")
+                .pathsToMatch("/auth/**")
                 .build();
     }
 
     @Bean
     public GroupedOpenApi customerApi() {
         return GroupedOpenApi.builder()
-                .group("customer-api")
-                .pathsToMatch("/customers/**")
+                .group("2.users-api")
+                .pathsToMatch("/users/**")
                 .build();
     }
 
     @Bean
     public GroupedOpenApi categoryApi() {
         return GroupedOpenApi.builder()
-                .group("category-api")
+                .group("2.category-api")
                 .pathsToMatch("/categories/**")
                 .build();
     }
@@ -68,7 +76,7 @@ public class SwaggerConfig {
     @Bean
     public GroupedOpenApi treatmaneApi() {
         return GroupedOpenApi.builder()
-                .group("treatment-api")
+                .group("3.treatment-api")
                 .pathsToMatch("/treatments/**")
                 .build();
     }
@@ -76,23 +84,15 @@ public class SwaggerConfig {
     @Bean
     public GroupedOpenApi productApi() {
         return GroupedOpenApi.builder()
-                .group("product-api")
+                .group("4.product-api")
                 .pathsToMatch("/products/**")
-                .build();
-    }
-
-    @Bean
-    public GroupedOpenApi staffApi() {
-        return GroupedOpenApi.builder()
-                .group("staff-api")
-                .pathsToMatch("/staffs/**")
                 .build();
     }
 
     @Bean
     public GroupedOpenApi feedbackApi() {
         return GroupedOpenApi.builder()
-                .group("feedback-api")
+                .group("5.feedback-api")
                 .pathsToMatch("/feedback/**")
                 .build();
     }
@@ -100,7 +100,7 @@ public class SwaggerConfig {
     @Bean
     public GroupedOpenApi orderApi() {
         return GroupedOpenApi.builder()
-                .group("order-api")
+                .group("6.order-api")
                 .pathsToMatch("/order/**")
                 .build();
     }
@@ -108,7 +108,7 @@ public class SwaggerConfig {
     @Bean
     public GroupedOpenApi productOrderApi() {
         return GroupedOpenApi.builder()
-                .group("product-order-api")
+                .group("7.product-order-api")
                 .pathsToMatch("/order/product/**")
                 .build();
     }
@@ -116,7 +116,7 @@ public class SwaggerConfig {
     @Bean
     public GroupedOpenApi statisApi() {
         return GroupedOpenApi.builder()
-                .group("statis-api")
+                .group("8.statis-api")
                 .pathsToMatch("/statis/**")
                 .build();
     }
@@ -124,7 +124,7 @@ public class SwaggerConfig {
     @Bean
     public GroupedOpenApi accountApi() {
         return GroupedOpenApi.builder()
-                .group("account-api")
+                .group("9.account-api")
                 .pathsToMatch("/accounts/**")
                 .build();
     }

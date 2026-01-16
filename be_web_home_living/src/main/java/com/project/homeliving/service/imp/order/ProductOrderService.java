@@ -4,12 +4,11 @@ import com.project.homeliving.dto.order.OrderDetailRequest;
 import com.project.homeliving.dto.order.ProductOrderRequest;
 import com.project.homeliving.dto.order.ProductOrderResponse;
 import com.project.homeliving.dto.order.OrderSearch;
-import com.project.homeliving.dto.user.response.CustomerResponse;
+import com.project.homeliving.dto.user.response.UserResponse;
 import com.project.homeliving.entity.order.Order;
 import com.project.homeliving.entity.order.OrderDetail;
 import com.project.homeliving.entity.product.Product;
-import com.project.homeliving.entity.user.Customer;
-import com.project.homeliving.entity.user.Staff;
+import com.project.homeliving.entity.user.User;
 import com.project.homeliving.exception.AppException;
 import com.project.homeliving.exception.ErrorCode;
 import com.project.homeliving.mapper.ProductOrderMapper;
@@ -53,9 +52,9 @@ public class ProductOrderService implements IProductOrderService {
 
     @Override
     public Page<ProductOrderResponse> search(OrderSearch search, Boolean searchMine) {
-        CustomerResponse customerResponse = new CustomerResponse();
+        UserResponse userResponse = new UserResponse();
         if(searchMine == true)
-            customerResponse = authenService.getCustomerInContext();
+            userResponse = null;
 
         Pageable pageable = PageRequest.of(search.getPage() - 1, search.getLimit());
         
@@ -64,7 +63,7 @@ public class ProductOrderService implements IProductOrderService {
                 search.getKeyword(),
                 "PRODUCT",
                 search.getPaymentType(),
-                customerResponse.getId(),
+                userResponse.getId(),
                 pageable
         );
         
@@ -78,7 +77,7 @@ public class ProductOrderService implements IProductOrderService {
             throw new AppException(ErrorCode.INVALID_REQUEST);
         }
 
-        CustomerResponse customerResponse = authenService.getCustomerInContext();
+        UserResponse userResponse = null;
 
         // Tạo Order
         Order order = Order.builder()
@@ -87,8 +86,7 @@ public class ProductOrderService implements IProductOrderService {
                 .paymentType(request.getPaymentType())
                 .paymentStatus("PAID")  // Mặc định PAID cho demo sinh viên
                 .orderTime(request.getOrderTime())
-                .customer(new Customer(customerResponse.getId()))
-                .staff(new Staff(request.getStaffId()))
+                .user(new User(userResponse.getId()))
                 .build();
 
         // Tính tổng tiền từ OrderDetails
@@ -122,8 +120,7 @@ public class ProductOrderService implements IProductOrderService {
         order.setPaymentType(request.getPaymentType());
         order.setPaymentStatus("PAID");  // Mặc định PAID cho demo sinh viên
         order.setOrderTime(request.getOrderTime());
-        order.setCustomer(new Customer(request.getCustomerId()));
-        order.setStaff(new Staff(request.getStaffId()));
+        order.setUser(new User(request.getCustomerId()));
 
         // Tính lại tổng tiền
         Double totalAmount = calculateTotalAmount(request);

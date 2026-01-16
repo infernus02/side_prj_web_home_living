@@ -14,21 +14,16 @@ import java.util.List;
 @Builder
 public class FeedbackResponse {
     Long id;
-    Double rating;          // Chỉ Customer feedback mới có
+    Double rating;          // Chỉ User feedback mới có
     String comment;
-    String feedbackType;    // "CUSTOMER" hoặc "STAFF_REPLY"
+    String feedbackType;    // "CUSTOMER" hoặc ""
     LocalDateTime createDate;
 
     Boolean isOwner;
-    // Customer info (nếu là Customer feedback)
+    // User info (nếu là User feedback)
     Long customerId;
     String customerName;
     String customerAvatar;
-
-    // Staff info (nếu là Staff reply)
-    Long staffId;
-    String staffName;
-    String staffAvatar;
 
     // Treatment/Product info
     Long treatmentId;

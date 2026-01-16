@@ -21,18 +21,11 @@ public class FeedbackMapper {
         FeedbackResponse response = ObjectMapperUtils.map(feedback, FeedbackResponse.class);
 
         try {
-            // Customer info (nếu là Customer feedback)
-            if(feedback.getCustomer() != null) {
-                response.setCustomerId(feedback.getCustomer().getId());
-                response.setCustomerName(feedback.getCustomer().getFullName());
-                response.setCustomerAvatar(feedback.getCustomer().getAvatar());
-            }
-
-            // Staff info (nếu là Staff reply)
-            if(feedback.getStaff() != null) {
-                response.setStaffId(feedback.getStaff().getId());
-                response.setStaffName(feedback.getStaff().getFullName());
-                response.setStaffAvatar(feedback.getStaff().getAvatar());
+            // User info (nếu là User feedback)
+            if(feedback.getUser() != null) {
+                response.setCustomerId(feedback.getUser().getId());
+                response.setCustomerName(feedback.getUser().getFullName());
+                response.setCustomerAvatar(feedback.getUser().getAvatar());
             }
 
             // Product info
@@ -66,15 +59,7 @@ public class FeedbackMapper {
     private FeedbackResponse toSimpleResponse(Feedback feedback) {
         FeedbackResponse response = ObjectMapperUtils.map(feedback, FeedbackResponse.class);
         try {
-            if(feedback.getStaff() != null) {
-                response.setStaffId(feedback.getStaff().getId());
-                response.setStaffName(feedback.getStaff().getFullName());
-                response.setStaffAvatar(feedback.getStaff().getAvatar());
-            }
 
-            if(feedback.getParentFeedback() != null) {
-                response.setParentFeedbackId(feedback.getParentFeedback().getId());
-            }
         } catch (Exception e) {
             log.error("Lỗi khi map simple feedback response: {}", e.getMessage());
         }

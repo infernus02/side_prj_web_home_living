@@ -60,7 +60,7 @@ public class FeedbackController {
                 .build();
     }
 
-    @Operation(summary = "create customer feedback")
+    @Operation(summary = "create user feedback")
     @PostMapping("")
     ApiResponse<?> create( @RequestBody FeedbackRequest request){
         return ApiResponse.<Object>builder()
@@ -68,7 +68,7 @@ public class FeedbackController {
                 .build();
     }
 
-    @Operation(summary = "staff reply to feedback")
+    @Operation(summary = " reply to feedback")
     @PostMapping("/reply")
     ApiResponse<?> replyFeedback(@RequestBody FeedbackReplyRequest request){
         return ApiResponse.<Object>builder()

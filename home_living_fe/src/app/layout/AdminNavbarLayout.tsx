@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { StorageKeys } from '../enums/StorageKeys';
 import AdminFooter from './AdminFooter';
 
 interface AdminNavbarLayoutProps {
@@ -13,18 +14,18 @@ const AdminNavbarLayout: React.FC<AdminNavbarLayoutProps> = ({ children }) => {
   const [currentUser, setCurrentUser] = React.useState<any>(null);
 
   React.useEffect(() => {
-    const user = localStorage.getItem('currentUser');
+    const user = localStorage.getItem(StorageKeys.AUTH_USER);
     if (!user) {
       navigate('/login');
       return;
     }
 
     const userData = JSON.parse(user);
-    if (userData.role !== 'admin') {
+    if (userData.role !== 'ADMIN' && userData.role !== 'STAFF') {
       Swal.fire({
         icon: 'error',
         title: 'Không có quyền truy cập',
-        text: 'Chỉ admin mới có thể truy cập trang này',
+        text: 'Chỉ admin/staff mới có thể truy cập trang này',
         timer: 1500,
         showConfirmButton: false
       }).then(() => {
@@ -38,7 +39,10 @@ const AdminNavbarLayout: React.FC<AdminNavbarLayoutProps> = ({ children }) => {
 
   const handleLogout = (e: React.MouseEvent) => {
     e.preventDefault();
-    localStorage.removeItem('currentUser');
+    localStorage.removeItem(StorageKeys.AUTH_USER);
+    localStorage.removeItem(StorageKeys.AUTH_TOKEN);
+    localStorage.removeItem(StorageKeys.AUTH_ROLE);
+    localStorage.removeItem(StorageKeys.AUTH_USERNAME);
     Swal.fire({
       icon: 'success',
       title: 'Đăng xuất thành công!',

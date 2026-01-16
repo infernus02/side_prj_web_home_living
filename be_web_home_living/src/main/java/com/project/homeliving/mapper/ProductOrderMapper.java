@@ -26,17 +26,13 @@ public class ProductOrderMapper {
                 .build();
 
         try {
-            // Customer info
-            if (order.getCustomer() != null) {
-                response.setCustomerId(order.getCustomer().getId());
-                response.setCustomerName(order.getCustomer().getFullName());
+            // User info
+            if (order.getUser() != null) {
+                response.setCustomerId(order.getUser().getId());
+                response.setCustomerName(order.getUser().getFullName());
             }
 
-            // Staff info
-            if (order.getStaff() != null) {
-                response.setStaffId(order.getStaff().getId());
-                response.setStaffName(order.getStaff().getFullName());
-            }
+
 
             // OrderDetails
             if (order.getOrderDetails() != null) {

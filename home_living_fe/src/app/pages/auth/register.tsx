@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import registerImage from '../../../assets/images/register.jpg';
 import '../../../assets/css/auth.css';
 
 const RegisterPage: React.FC = () => {
@@ -92,7 +93,7 @@ const RegisterPage: React.FC = () => {
           <div className="auth-image-side">
             <div className="auth-image-content">
               <img
-                src="https://via.placeholder.com/500x600?text=Home+Living"
+                src={registerImage}
                 alt="Home Living"
               />
               <div className="auth-image-overlay">

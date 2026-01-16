@@ -5,17 +5,16 @@ import com.project.homeliving.dto.authen.request.LoginRequest;
 import com.project.homeliving.dto.authen.request.RegisterRequest;
 import com.project.homeliving.dto.authen.response.LoginResponse;
 import com.project.homeliving.dto.user.response.AccountResponse;
-import com.project.homeliving.dto.user.response.CustomerResponse;
-import com.project.homeliving.dto.user.response.StaffResponse;
+import com.project.homeliving.dto.user.response.UserResponse;
 import com.project.homeliving.entity.user.Account;
+import com.project.homeliving.enums.RoleEnum;
 
 public interface IAuthenService {
-    LoginResponse register(RegisterRequest request);
+    LoginResponse register(RegisterRequest request, RoleEnum role);
     LoginResponse login(LoginRequest request);
 
     Account getCurrentUser();
     AccountResponse changePassword(ChangePassRequest request);
 
-    StaffResponse getStafInContext();
-    CustomerResponse getCustomerInContext();
+    UserResponse getUserInContext();
 }

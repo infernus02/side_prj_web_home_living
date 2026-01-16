@@ -6,17 +6,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CustomerRequest {
+public class UserRequest {
     String fullName;
     String phoneNumber;
     String email;
-    @NotNull(message = "Username không được để trống")
-    String userName;
-    @NotNull(message = "Password không được để trống")
-    String password;
+    MultipartFile avatarFile;
 }

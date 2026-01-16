@@ -11,6 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class FeedbackReplyRequest {
     String comment;
-    Long staffId;
-    Long parentFeedbackId;  // ID của feedback gốc mà Staff đang reply
+    Long parentFeedbackId;  // ID của feedback gốc mà  đang reply
 }

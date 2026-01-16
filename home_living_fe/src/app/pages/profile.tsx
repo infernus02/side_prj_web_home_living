@@ -1,39 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../assets/css/profile.css';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
-
-interface UserProfile {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
-  address: string;
-  city: string;
-  district: string;
-  ward: string;
-  avatar: string;
-  joinDate: string;
-}
+import { authService } from '../services/authService';
+import { User } from '../model/User';
+import defaultAvatar from '../../assets/images/default.jpg';
 
 const ProfilePage: React.FC = () => {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
-  const [profile, setProfile] = useState<UserProfile>({
-    id: 1,
-    name: 'Nguyễn Văn A',
-    email: 'nguyenvana@email.com',
-    phone: '0901234567',
-    address: '123 Đường ABC',
-    city: 'Hà Nội',
-    district: 'Quận 1',
-    ward: 'Phường 1',
-    avatar: 'https://via.placeholder.com/150',
-    joinDate: '2024-01-10'
+  const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState({
+    fullName: '',
+    email: '',
+    phoneNumber: '',
+    avatar: '',
+    userName: '',
+    createDate: ''
   });
 
   const [formData, setFormData] = useState(profile);
+
+  useEffect(() => {
+    const currentUser = authService.getCurrentUser();
+    if (!currentUser) {
+      navigate('/login');
+      return;
+    }
+    setUser(currentUser);
+    setProfile({
+      fullName: currentUser.fullName || '',
+      email: currentUser.email || '',
+      phoneNumber: currentUser.phoneNumber || '',
+      avatar: currentUser.avatar || defaultAvatar,
+      userName: currentUser.userName,
+      createDate: currentUser.createDate
+    });
+    setFormData({
+      fullName: currentUser.fullName || '',
+      email: currentUser.email || '',
+      phoneNumber: currentUser.phoneNumber || '',
+      avatar: currentUser.avatar || defaultAvatar,
+      userName: currentUser.userName,
+      createDate: currentUser.createDate
+    });
+  }, [navigate]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -51,7 +63,7 @@ const ProfilePage: React.FC = () => {
   };
 
   const handleSaveProfile = () => {
-    if (!formData.name || !formData.email || !formData.phone) {
+    if (!formData.fullName || !formData.email || !formData.phoneNumber) {
       toast.error('Vui lòng điền đầy đủ thông tin bắt buộc');
       return;
     }
@@ -122,8 +134,7 @@ const ProfilePage: React.FC = () => {
       cancelButtonText: 'Hủy'
     }).then(result => {
       if (result.isConfirmed) {
-        localStorage.removeItem('currentUser');
-        toast.success('Đã đăng xuất');
+        authService.logout();
         navigate('/login');
       }
     });
@@ -140,10 +151,10 @@ const ProfilePage: React.FC = () => {
         <div className="profile-content">
           <div className="profile-sidebar">
             <div className="profile-avatar">
-              <img src={profile.avatar} alt={profile.name} />
-              <p className="profile-name">{profile.name}</p>
-              <p className="profile-email">{profile.email}</p>
-              <p className="profile-join-date">Tham gia từ {profile.joinDate}</p>
+              <img src={profile.avatar || defaultAvatar} alt={profile.fullName || 'User'} />
+              <p className="profile-name">{profile.fullName || profile.userName}</p>
+              <p className="profile-email">{profile.email || profile.userName}</p>
+              <p className="profile-join-date">Tham gia từ {new Date(profile.createDate).toLocaleDateString('vi-VN')}</p>
             </div>
 
             <div className="profile-actions">
@@ -167,37 +178,19 @@ const ProfilePage: React.FC = () => {
                   <div className="info-grid">
                     <div className="info-item">
                       <label>Họ và tên</label>
-                      <p>{profile.name}</p>
+                      <p>{profile.fullName || 'Chưa cập nhật'}</p>
                     </div>
                     <div className="info-item">
                       <label>Email</label>
-                      <p>{profile.email}</p>
+                      <p>{profile.email || 'Chưa cập nhật'}</p>
                     </div>
                     <div className="info-item">
                       <label>Số điện thoại</label>
-                      <p>{profile.phone}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="info-section">
-                  <h2>Địa Chỉ</h2>
-                  <div className="info-grid">
-                    <div className="info-item">
-                      <label>Địa chỉ</label>
-                      <p>{profile.address}</p>
+                      <p>{profile.phoneNumber || 'Chưa cập nhật'}</p>
                     </div>
                     <div className="info-item">
-                      <label>Thành phố</label>
-                      <p>{profile.city}</p>
-                    </div>
-                    <div className="info-item">
-                      <label>Quận/Huyện</label>
-                      <p>{profile.district}</p>
-                    </div>
-                    <div className="info-item">
-                      <label>Phường/Xã</label>
-                      <p>{profile.ward}</p>
+                      <label>Tên đăng nhập</label>
+                      <p>{profile.userName}</p>
                     </div>
                   </div>
                 </div>
@@ -211,8 +204,8 @@ const ProfilePage: React.FC = () => {
                       <label>Họ và tên *</label>
                       <input
                         type="text"
-                        name="name"
-                        value={formData.name}
+                        name="fullName"
+                        value={formData.fullName}
                         onChange={handleInputChange}
                         placeholder="Nhập họ và tên"
                       />
@@ -231,56 +224,10 @@ const ProfilePage: React.FC = () => {
                       <label>Số điện thoại *</label>
                       <input
                         type="text"
-                        name="phone"
-                        value={formData.phone}
+                        name="phoneNumber"
+                        value={formData.phoneNumber}
                         onChange={handleInputChange}
                         placeholder="Nhập số điện thoại"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="edit-section">
-                  <h2>Chỉnh Sửa Địa Chỉ</h2>
-                  <div className="form-grid">
-                    <div className="form-group full-width">
-                      <label>Địa chỉ</label>
-                      <input
-                        type="text"
-                        name="address"
-                        value={formData.address}
-                        onChange={handleInputChange}
-                        placeholder="Nhập địa chỉ"
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>Thành phố</label>
-                      <input
-                        type="text"
-                        name="city"
-                        value={formData.city}
-                        onChange={handleInputChange}
-                        placeholder="Nhập thành phố"
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>Quận/Huyện</label>
-                      <input
-                        type="text"
-                        name="district"
-                        value={formData.district}
-                        onChange={handleInputChange}
-                        placeholder="Nhập quận/huyện"
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>Phường/Xã</label>
-                      <input
-                        type="text"
-                        name="ward"
-                        value={formData.ward}
-                        onChange={handleInputChange}
-                        placeholder="Nhập phường/xã"
                       />
                     </div>
                   </div>

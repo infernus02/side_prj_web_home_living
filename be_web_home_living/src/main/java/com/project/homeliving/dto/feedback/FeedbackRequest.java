@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class FeedbackRequest {
-    Double rating;      // Chỉ Customer mới có rating
+    Double rating;      // Chỉ User mới có rating
     String comment;
-    Long customerId;    // Chỉ Customer feedback
+    Long customerId;    // Chỉ User feedback
     Long productId;     // Có thể null
 }

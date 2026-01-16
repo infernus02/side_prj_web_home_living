@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 
 public enum RoleEnum {
     ADMIN,
-    CUSTOMER,
-    STAFF
+    STAFF,
+    CUSTOMER
     ;
 
     public static List<String> roleList(){

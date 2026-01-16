@@ -212,7 +212,7 @@
 
 .header-link {
     color: #b0b0b0;
-    font-size: 12px;
+    font-size: 14px;
     text-decoration: none;
     transition: color 0.3s;
 }
@@ -223,6 +223,12 @@
 
 .header-link:hover {
     color: #ff6b5b;
+}
+
+.user-name {
+    color: #b0b0b0;
+    font-size: 13px;
+    white-space: nowrap;
 }
 
 /* Responsive */

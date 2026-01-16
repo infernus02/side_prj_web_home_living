@@ -23,19 +23,4 @@ public interface IOrderDetailRepository extends JpaRepository<OrderDetail, Long>
     order by od.createDate desc
     """)
     List<OrderDetail> findByOrderId(@Param("orderId") Long orderId);
-    
-    @Query("""
-    select od from OrderDetail od
-    where od.order.staff.id = :staffId
-        and od.order.paymentStatus = 'PAID'
-        and od.order.isDelete = false
-        and od.isDelete = false
-        and extract(month from od.order.createDate) = :month
-        and extract(year from od.order.createDate) = :year
-    """)
-    List<OrderDetail> findByStaffAndMonth(
-        @Param("staffId") Long staffId,
-        @Param("month") int month,
-        @Param("year") int year
-    );
 }

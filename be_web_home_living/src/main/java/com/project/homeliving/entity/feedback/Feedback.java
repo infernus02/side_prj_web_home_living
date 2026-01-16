@@ -2,8 +2,7 @@ package com.project.homeliving.entity.feedback;
 
 import com.project.homeliving.entity.BaseEntity;
 import com.project.homeliving.entity.product.Product;
-import com.project.homeliving.entity.user.Customer;
-import com.project.homeliving.entity.user.Staff;
+import com.project.homeliving.entity.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,26 +22,21 @@ public class Feedback extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    Double rating;          // Chỉ Customer mới có rating, Staff reply không có
+    Double rating;          // Chỉ User mới có rating, reply không có
     String comment;
-    String feedbackType;    // "CUSTOMER" hoặc "STAFF_REPLY"
+    String feedbackType;    // "CUSTOMER" hoặc ""
 
-    // Customer feedback (chỉ 1 lần)
+    // User feedback (chỉ 1 lần)
     @ManyToOne
     @JoinColumn(name = "customer_id")
-    Customer customer;
+    User user;
 
-    // Staff reply (có thể nhiều lần)
-    @ManyToOne
-    @JoinColumn(name = "staff_id")
-    Staff staff;
-
-    // Feedback gốc mà Staff đang reply (null nếu là feedback gốc của Customer)
+    // Feedback gốc mà  đang reply (null nếu là feedback gốc của User)
     @ManyToOne
     @JoinColumn(name = "parent_feedback_id")
     Feedback parentFeedback;
 
-    // Danh sách replies từ Staff
+    // Danh sách replies từ
     @OneToMany(mappedBy = "parentFeedback", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<Feedback> replies;
 

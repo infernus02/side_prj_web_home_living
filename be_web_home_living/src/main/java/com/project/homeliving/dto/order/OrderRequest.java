@@ -20,7 +20,6 @@ public class OrderRequest {
     LocalDateTime orderTime;
 
     Long customerId;
-    Long staffId;
     Long treatmentId;           // Optional - có thể null
     List<OrderDetailRequest> orderDetails;  // Danh sách sản phẩm
 }

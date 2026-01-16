@@ -37,7 +37,7 @@
 
 /* Auth Form Side */
 .auth-form-side {
-    padding: 60px;
+    padding: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -48,8 +48,8 @@
 }
 
 .auth-form-content h1 {
-    font-size: 32px;
-    margin-bottom: 10px;
+    font-size: 28px;
+    margin-bottom: 8px;
     color: #333;
     font-weight: 700;
 }
@@ -60,8 +60,8 @@
 
 .auth-subtitle {
     color: #999;
-    margin-bottom: 30px;
-    font-size: 14px;
+    margin-bottom: 20px;
+    font-size: 13px;
 }
 
 [data-theme="dark"] .auth-subtitle {
@@ -70,11 +70,11 @@
 
 /* Auth Form */
 .auth-form {
-    margin-bottom: 25px;
+    margin-bottom: 15px;
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .form-group label {
@@ -153,7 +153,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
     font-size: 13px;
 }
 
@@ -189,7 +189,7 @@
 
 /* Agree Terms */
 .form-agree {
-    margin-bottom: 25px;
+    margin-bottom: 15px;
 }
 
 .form-agree label {
@@ -254,7 +254,7 @@
     display: flex;
     align-items: center;
     gap: 15px;
-    margin: 25px 0;
+    margin: 15px 0;
     color: #999;
     font-size: 13px;
 }
@@ -281,7 +281,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 15px;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
 }
 
 .social-btn {
@@ -340,7 +340,7 @@
 /* Auth Image Side */
 .auth-image-side {
     background: linear-gradient(135deg, #3d3d3d 0%, #2c2c2c 100%);
-    padding: 60px;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -355,13 +355,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 .auth-image-content img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 8px;
 }
 
 .auth-image-overlay {

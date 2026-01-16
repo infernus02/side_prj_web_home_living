@@ -18,9 +18,8 @@ public interface IOrderRepository extends JpaRepository<Order, Long> {
         where
              (
                   :keyword is null
-                  or e.customer.fullName ilike %:keyword%
-                  or e.staff.fullName ilike %:keyword%
-                  or e.customer.phoneNumber ilike %:keyword%
+                  or e.user.fullName ilike %:keyword%
+                  or e.user.phoneNumber ilike %:keyword%
             )
             and (:paymentType is null or e.paymentType = :paymentType)
             and (:status is null or e.paymentStatus = :status)
@@ -37,13 +36,12 @@ public interface IOrderRepository extends JpaRepository<Order, Long> {
         where
              (
                   :keyword is null
-                  or e.customer.fullName ilike %:keyword%
-                  or e.staff.fullName ilike %:keyword%
-                  or e.customer.phoneNumber ilike %:keyword%
+                  or e.user.fullName ilike %:keyword%
+                  or e.user.phoneNumber ilike %:keyword%
             )
             and e.type = :orderType
             and (:paymentType is null or e.paymentType = :paymentType)
-            and (:customerId is null or e.customer.id = :customerId)
+            and (:customerId is null or e.user.id = :customerId)
             and e.isDelete <> true
             order by e.createDate desc
     """)

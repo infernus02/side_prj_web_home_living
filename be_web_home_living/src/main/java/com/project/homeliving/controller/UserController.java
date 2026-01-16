@@ -1,31 +1,33 @@
 package com.project.homeliving.controller;
 
-import com.project.homeliving.dto.user.request.CustomerRequest;
+import com.project.homeliving.dto.user.request.UserRequest;
 import com.project.homeliving.dto.user.request.CustomerSearchRequest;
 import com.project.homeliving.dto.user.request.CustomerUpdateRequest;
 import com.project.homeliving.exception.ApiResponse;
 import com.project.homeliving.service.interfaces.user.IAuthenService;
-import com.project.homeliving.service.interfaces.user.ICustomerService;
+import com.project.homeliving.service.interfaces.user.IUserService;
 import com.project.homeliving.util.StrUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/customers")
+@RequestMapping("/users")
 @RequiredArgsConstructor
-@Tag(name = "customer controller")
-public class CustomerController {
-    private final ICustomerService customerService;
+@Tag(name = "user controller")
+public class UserController {
+    private final IUserService userService;
     private final IAuthenService authenService;
 
-    @GetMapping("/myinfo")
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/info")
     ApiResponse<?>getInfo(){
         return ApiResponse.<Object>builder()
-                .data(authenService.getCustomerInContext())
+                .data(authenService.getUserInContext())
                 .build();
     }
 
@@ -41,7 +43,7 @@ public class CustomerController {
                 .limit(limit)
                 .build();
         return ApiResponse.<Object>builder()
-                .data(customerService.search(searchRequest))
+                .data(userService.search(searchRequest))
                 .build();
     }
 
@@ -49,15 +51,15 @@ public class CustomerController {
     @GetMapping("/{id}")
     ApiResponse<Object> details(@PathVariable Long id){
         return ApiResponse.<Object>builder()
-                .data(customerService.detail(id))
+                .data(userService.detail(id))
                 .build();
     }
 
     @Operation(summary = "create")
     @PostMapping("")
-    ApiResponse<?> create(@Valid @RequestBody CustomerRequest request){
+    ApiResponse<?> create(@Valid @RequestBody UserRequest request){
         return ApiResponse.<Object>builder()
-                .data(customerService.create(request))
+                .data(userService.create(request))
                 .build();
     }
 
@@ -65,7 +67,7 @@ public class CustomerController {
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ApiResponse<?>update(@PathVariable Long id, @ModelAttribute CustomerUpdateRequest request){
         return ApiResponse.<Object>builder()
-                .data(customerService.updateProfile(id, request))
+                .data(userService.updateProfile(id, request))
                 .build();
     }
 
@@ -73,14 +75,14 @@ public class CustomerController {
     @PutMapping(value = "/myinfo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ApiResponse<?>update( @ModelAttribute CustomerUpdateRequest request){
         return ApiResponse.<Object>builder()
-                .data(customerService.updateProfileInfo(request))
+                .data(userService.updateProfileInfo(request))
                 .build();
     }
 
     @Operation(summary = "delete")
     @DeleteMapping(value = "/{id}")
     ApiResponse<?>delete(@PathVariable Long id){
-        customerService.delete(id);
+        userService.delete(id);
         return ApiResponse.<String>builder()
                 .data("delete ok")
                 .build();

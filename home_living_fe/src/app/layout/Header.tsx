@@ -1,30 +1,36 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import Swal from 'sweetalert2';
+import { toast } from 'react-toastify';
 import { useTheme } from '../context/ThemeContext';
+import { authService } from '../services/authService';
+import { User } from '../model/User';
+import defaultAvatar from '../../assets/images/default.jpg';
 
 const Header: React.FC = () => {
-  const [currentUser, setCurrentUser] = React.useState<any>(null);
+  const [currentUser, setCurrentUser] = React.useState<User | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { isDark, toggleTheme } = useTheme();
 
   React.useEffect(() => {
-    const user = localStorage.getItem('currentUser');
+    const user = authService.getCurrentUser();
     if (user) {
-      setCurrentUser(JSON.parse(user));
+      setCurrentUser(user);
     }
+
+    // Listen for auth changes (login/logout)
+    const handleAuthChange = (event: any) => {
+      const { user } = event.detail;
+      setCurrentUser(user);
+    };
+
+    window.addEventListener('authChange', handleAuthChange);
+    return () => window.removeEventListener('authChange', handleAuthChange);
   }, []);
 
   const handleLogout = (e: React.MouseEvent) => {
     e.preventDefault();
-    localStorage.removeItem('currentUser');
-    Swal.fire({
-      icon: 'success',
-      title: 'Đăng xuất thành công!',
-      timer: 1500,
-      showConfirmButton: false
-    });
+    authService.logout();
     setCurrentUser(null);
     navigate('/');
   };
@@ -82,11 +88,18 @@ const Header: React.FC = () => {
               <i className="fa-solid fa-cart-shopping"></i>
               <span className="badge">2</span>
             </a>
-            <a href="/profile" className="header-icon" title="Tài khoản">
-              <i className="fa-solid fa-user"></i>
-            </a>
             {currentUser ? (
-              <a href="#" onClick={handleLogout} className="header-link">Đăng xuất</a>
+              <>
+                <a href="/profile" className="header-icon user-profile" title={currentUser.fullName || currentUser.userName}>
+                  {currentUser?.avatar ? (
+                    <img src={currentUser.avatar} alt="Avatar" style={{ width: '20px', height: '20px', borderRadius: '50%', objectFit: 'cover' }} />
+                  ) : (
+                    <img src={defaultAvatar} alt="Avatar" style={{ width: '20px', height: '20px', borderRadius: '50%', objectFit: 'cover' }} />
+                  )}
+                </a>
+                <span className="user-name">{currentUser.fullName || currentUser.userName}</span>
+                <a href="#" onClick={handleLogout} className="header-link">Đăng xuất</a>
+              </>
             ) : (
               <a href="/login" className="header-link">Đăng nhập</a>
             )}

@@ -23,8 +23,6 @@ public class ProductOrderResponse {
 
     Long customerId;
     String customerName;
-    Long staffId;
-    String staffName;
 
     List<OrderDetailResponse> orderDetails;
 }

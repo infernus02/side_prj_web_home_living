@@ -16,8 +16,7 @@ public enum ErrorCode {
     USER_NOT_FOUND(400, "Không tìm thấy user"),
     USERNAME_WAS_REGISTER(400, "Tên đăng nhập đã được sử dụng"),
 
-    CUSTOMER_NOT_FOUND(400, "Không tìm thấy thông tin customer"),
-    STAFF_NOT_FOUND(400, "Không tìm thấy thông tin nhân viên"),
+    CUSTOMER_NOT_FOUND(400, "Không tìm thấy thông tin user"),
 
     PASSWORD_NOT_NULL(400, "Mật khẩu không được để trống!"),
     PASSWORD_NOT_MATCH(400, "Mật khẩu cũ không đúng"),
@@ -47,8 +46,6 @@ public enum ErrorCode {
     CANNOT_DELETE_PRODUCT_HAS_FEEDBACKS(400, "Không thể xóa sản phẩm vì còn có đánh giá liên quan"),
     CANNOT_DELETE_CUSTOMER_HAS_ORDERS(400, "Không thể xóa khách hàng vì còn có đơn hàng liên quan"),
     CANNOT_DELETE_CUSTOMER_HAS_FEEDBACKS(400, "Không thể xóa khách hàng vì còn có đánh giá liên quan"),
-    CANNOT_DELETE_STAFF_HAS_ORDERS(400, "Không thể xóa nhân viên vì còn có đơn hàng liên quan"),
-    CANNOT_DELETE_STAFF_HAS_COMMISSIONS(400, "Không thể xóa nhân viên vì còn có cấu hình hoa hồng liên quan"),
     CANNOT_DELETE_ORDER_HAS_FEEDBACKS(400, "Không thể xóa đơn hàng vì còn có đánh giá liên quan"),
     CANNOT_DELETE_FEEDBACK_HAS_REPLIES(400, "Không thể xóa đánh giá vì còn có phản hồi từ nhân viên"),
     ;

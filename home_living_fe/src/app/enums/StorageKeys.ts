@@ -1,0 +1,6 @@
+export enum StorageKeys {
+  AUTH_TOKEN = 'AUTH_TOKEN',
+  AUTH_ROLE = 'AUTH_ROLE',
+  AUTH_USERNAME = 'AUTH_USERNAME',
+  AUTH_USER = 'AUTH_USER'
+}

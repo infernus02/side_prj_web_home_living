@@ -23,8 +23,6 @@ public class OrderResponse {
 
     Long customerId;
     String customerName;
-    Long staffId;
-    String staffName;
     Long treatmentId;
     String treatmentName;
     Double treatmentPrice;

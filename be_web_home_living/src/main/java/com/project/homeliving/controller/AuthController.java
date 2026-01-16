@@ -5,6 +5,7 @@ import com.project.homeliving.dto.authen.request.LoginRequest;
 import com.project.homeliving.dto.authen.request.RegisterRequest;
 import com.project.homeliving.dto.authen.response.LoginResponse;
 import com.project.homeliving.dto.user.response.AccountResponse;
+import com.project.homeliving.enums.RoleEnum;
 import com.project.homeliving.exception.ApiResponse;
 import com.project.homeliving.service.interfaces.user.IAuthenService;
 import lombok.AccessLevel;
@@ -30,7 +31,7 @@ public class AuthController {
     @PostMapping("/register")
     ApiResponse<LoginResponse> register(@RequestBody RegisterRequest request){
         return ApiResponse.<LoginResponse>builder()
-                .data(authenService.register(request))
+                .data(authenService.register(request, RoleEnum.CUSTOMER))
                 .build();
     }
 

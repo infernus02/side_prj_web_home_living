@@ -62,7 +62,7 @@ public class StatisController {
     @Operation(summary = "Báo cáo doanh thu theo loại")
     @GetMapping("/revenue/report")
     public ApiResponse<List<RevenueReportResponse>> getRevenueReport(
-            @RequestParam(name = "type") String type, // "daily", "staff", "service"
+            @RequestParam(name = "type") String type, // "daily",  "service"
             @RequestParam(name = "startDate", required = false) String startDate,
             @RequestParam(name = "endDate", required = false) String endDate) {
 

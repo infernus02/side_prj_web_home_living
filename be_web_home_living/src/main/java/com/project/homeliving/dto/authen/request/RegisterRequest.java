@@ -1,5 +1,7 @@
 package com.project.homeliving.dto.authen.request;
 
+import com.project.homeliving.dto.user.request.AccountRequest;
+import com.project.homeliving.dto.user.request.UserRequest;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -9,6 +11,6 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RegisterRequest {
-    String username;
-    String password;
+    AccountRequest account;
+    UserRequest user;
 }

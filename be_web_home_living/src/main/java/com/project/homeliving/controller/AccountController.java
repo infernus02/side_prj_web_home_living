@@ -24,9 +24,8 @@ public class AccountController {
         Object object = null;
 
         if (RoleEnum.CUSTOMER.name().equalsIgnoreCase(account.getRole().getName())){
-            object = authenService.getCustomerInContext();
-        }else
-            object = authenService.getStafInContext();
+            object = null;
+        }
 
         return ApiResponse.builder()
                 .data(object)

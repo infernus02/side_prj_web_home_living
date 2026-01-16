@@ -18,15 +18,12 @@ public class OrderMapper {
         OrderResponse response = ObjectMapperUtils.map(order, OrderResponse.class);
 
         try {
-            if(order.getCustomer() != null) {
-                response.setCustomerId(order.getCustomer().getId());
-                response.setCustomerName(order.getCustomer().getFullName());
+            if(order.getUser() != null) {
+                response.setCustomerId(order.getUser().getId());
+                response.setCustomerName(order.getUser().getFullName());
             }
 
-            if(order.getStaff() != null) {
-                response.setStaffId(order.getStaff().getId());
-                response.setStaffName(order.getStaff().getFullName());
-            }
+
 
 
             // Map OrderDetails

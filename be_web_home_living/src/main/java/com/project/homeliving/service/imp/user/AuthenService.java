@@ -7,27 +7,24 @@ import com.project.homeliving.dto.authen.request.LoginRequest;
 import com.project.homeliving.dto.authen.request.RegisterRequest;
 import com.project.homeliving.dto.authen.response.LoginResponse;
 import com.project.homeliving.dto.user.response.AccountResponse;
-import com.project.homeliving.dto.user.response.CustomerResponse;
-import com.project.homeliving.dto.user.response.StaffResponse;
+import com.project.homeliving.dto.user.response.UserResponse;
 import com.project.homeliving.entity.user.Account;
-import com.project.homeliving.entity.user.Customer;
+import com.project.homeliving.entity.user.User;
 import com.project.homeliving.entity.user.Role;
-import com.project.homeliving.entity.user.Staff;
 import com.project.homeliving.enums.RoleEnum;
 import com.project.homeliving.exception.AppException;
 import com.project.homeliving.exception.ErrorCode;
 import com.project.homeliving.mapper.AccountMapper;
-import com.project.homeliving.mapper.CustomerMapper;
-import com.project.homeliving.mapper.StaffMapper;
+import com.project.homeliving.mapper.UserMapper;
 import com.project.homeliving.repository.user.IAccountRepository;
-import com.project.homeliving.repository.user.ICustomerRepository;
-import com.project.homeliving.repository.user.IStaffRepository;
+import com.project.homeliving.repository.user.IUserRepository;
 import com.project.homeliving.service.interfaces.user.IAuthenService;
 import com.project.homeliving.service.interfaces.user.IAccountService;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,38 +32,45 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @Transactional
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 public class AuthenService implements IAuthenService {
-    private final IAccountRepository userRepository;
+    private final IAccountRepository accountRepository;
+    private final IUserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
     private final PasswordEncoder passwordEncoder;
     private final IAccountService userService;
+    private final IUserRepository customerRepository;
+
     private final  AccountMapper accountMapper;
-    private final StaffMapper staffMapper;
-    private final CustomerMapper customerMapper;
-    private final IStaffRepository staffRepository;
-    private final ICustomerRepository customerRepository;
+    private final UserMapper userMapper;
 
     @Override
-    public LoginResponse register(RegisterRequest request) {
-        if(userService.exitsByUsername(request.getUsername()))
+    public LoginResponse register(RegisterRequest request, RoleEnum role) {
+        if(userService.exitsByUsername(request.getAccount().getUsername()))
             throw new AppException(ErrorCode.USERNAME_WAS_REGISTER);
 
-        Role role = new Role(RoleEnum.ADMIN.name());
+        if (role == null)
+            role = RoleEnum.CUSTOMER;
+
         Account account = Account.builder()
-                .username(request.getUsername())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(role)
+                .username(request.getAccount().getUsername())
+                .password(passwordEncoder.encode(request.getAccount().getPassword()))
+                .role(new Role(role.name()))
                 .build();
 
-        userRepository.save(account);
+        User user = userMapper.toEntity(request.getUser());
+        user.setAccount(account);
+
+        accountRepository.save(account);
+        userRepository.save(user);
         return LoginResponse.builder()
-                .username(request.getUsername())
-                .role(role.getName())
+                .username(request.getAccount().getUsername())
+                .role(role.name())
                 .build();
     }
 
@@ -94,7 +98,7 @@ public class AuthenService implements IAuthenService {
         if (username == null)
             throw new AppException(ErrorCode.UNAUTHEN);
 
-        return userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        return accountRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
     }
 
 
@@ -109,20 +113,13 @@ public class AuthenService implements IAuthenService {
 
         account.setPassword(passwordEncoder.encode(request.getNewPass()));
 
-        return accountMapper.toResponse(userRepository.save(account));
+        return accountMapper.toResponse(accountRepository.save(account));
     }
 
     @Override
-    public StaffResponse getStafInContext() {
+    public UserResponse getUserInContext() {
         Account account = this.getCurrentUser();
-        Staff staff = staffRepository.findByAccountId(account.getId());
-        return staffMapper.toResponse(staff);
-    }
-
-    @Override
-    public CustomerResponse getCustomerInContext() {
-        Account account = this.getCurrentUser();
-        Customer customer = customerRepository.findByAccountId(account.getId());
-        return customerMapper.toResponse(customer);
+        User user = customerRepository.findByAccountId(account.getId());
+        return userMapper.toResponse(user);
     }
 }
